@@ -5,9 +5,7 @@ const path = require("path");
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
 
-const uri = process.env.MONGODB_URI;
-
-const PORT = uri || 3001;
+const PORT = process.env.MONGODB_URI || 3004;
 const app = express();
 
 const server = new ApolloServer({
@@ -21,9 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 if (process.env.NODE_ENV === "production") {
-  db.connect(process.env.MONGODB_URI);
-} else {
-  db.connect(DB_URL);
+  app.use(express.static(path.join(__dirname, "../client/build")));
 }
 
 app.get("*", (req, res) => {
