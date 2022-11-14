@@ -21,7 +21,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../client/build")));
+  db.connect(process.env.MONGODB_URI);
+} else {
+  db.connect(DB_URL);
 }
 
 app.get("*", (req, res) => {
